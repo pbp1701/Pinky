@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WAV → MP3 Converter</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app-shell">
+    <h1>WAV → MP3</h1>
+    <p class="subtitle">Client-side encoder. No upload, no server.</p>
+
+    <div id="drop-zone" class="drop-zone">
+      <div class="drop-content">
+        <div class="icon">🎵</div>
+        <strong>Click to import</strong>
+        <span>or drag & drop WAV files here</span>
+      </div>
+      <input id="file-input" type="file" accept="audio/wav,.wav" multiple />
+    </div>
+
+    <div class="controls-row">
+      <label for="bitrate">MP3 Quality</label>
+      <select id="bitrate">
+        <option value="128">128 kbps — Medium</option>
+        <option value="160">160 kbps — Good</option>
+        <option value="192" selected>192 kbps — High</option>
+        <option value="256">256 kbps — Very High</option>
+      </select>
+    </div>
+
+    <button id="convert-btn" class="primary-btn" disabled>Convert All</button>
+    <button id="clear-btn" class="secondary-btn" disabled>Clear</button>
+
+    <section id="file-list" class="file-list"></section>
+  </main>
+
+  <script src="https://unpkg.com/lamejs@1.2.0/lame.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
