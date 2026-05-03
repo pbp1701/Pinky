@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.0",
+  "generated_by": "codex",
+  "app": {
+    "name": "WAV to MP3 Converter",
+    "description": "A client-side web app that converts WAV files to MP3 directly in the browser using lamejs. No files are uploaded to a server.",
+    "category": "audio",
+    "platform": "web",
+    "primary_language": "en",
+    "url": "https://muddysouthmusic.netlify.app/",
+    "developer": {
+      "name": "Muddy South Music",
+      "website": "https://muddysouthmusic.netlify.app/",
+      "contact": "https://www.youtube.com/@MuddySouthMusic"
+    }
+  },
+  "features": [
+    "Drag-and-drop WAV file import",
+    "Multiple file batch conversion",
+    "Selectable MP3 bitrate (128, 160, 192, 256 kbps)",
+    "In-browser conversion with no server upload",
+    "Per-file conversion status and MP3 download links"
+  ],
+  "privacy": {
+    "data_collection": "none",
+    "file_handling": "All audio files remain on-device and are processed locally in-browser.",
+    "third_party_services": [
+      "https://unpkg.com/lamejs@1.2.0/lame.min.js"
+    ]
+  },
+  "review_checklist": {
+    "metadata_verified": true,
+    "links_verified": true,
+    "claims_reviewed": true,
+    "notes": "Generated draft; confirm final contact and production URL before submission."
+  }
+}
