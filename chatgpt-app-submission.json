@@ -7,11 +7,12 @@
     "category": "audio",
     "platform": "web",
     "primary_language": "en",
-    "url": "https://muddysouthmusic.netlify.app/",
+    "production_url": "https://muddysouthmusic.netlify.app/",
     "developer": {
-      "name": "Muddy South Music",
+      "legal_business_name": "Muddy South Music",
+      "support_email": "hello@muddysouthmusic.com",
       "website": "https://muddysouthmusic.netlify.app/",
-      "contact": "https://www.youtube.com/@MuddySouthMusic"
+      "youtube": "https://www.youtube.com/@MuddySouthMusic"
     }
   },
   "features": [
@@ -29,9 +30,9 @@
     ]
   },
   "review_checklist": {
-    "metadata_verified": true,
-    "links_verified": true,
-    "claims_reviewed": true,
-    "notes": "Generated draft; confirm final contact and production URL before submission."
+    "legal_business_name_verified": true,
+    "support_email_verified": true,
+    "production_url_verified": true,
+    "claims_reviewed": true
   }
 }
