@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.0",
+  "generated_by": "codex",
+  "app": {
+    "name": "WAV to MP3 Converter",
+    "description": "Professional-grade audio conversion by Muddy South Music. This tool runs entirely in your browser using lamejs, meaning your files are never uploaded to a server for maximum privacy. This service is free\u2014if it helps your workflow, tips are greatly appreciated via Cash App: https://cash.app/$MuddySouthMusic.",
+    "category": "Music",
+    "platform": "web",
+    "primary_language": "en",
+    "production_url": "https://muddysouthmusic.netlify.app/",
+    "developer": {
+      "legal_business_name": "Muddy South Music",
+      "support_email": "pbp1701@gmail.com",
+      "website": "https://muddysouthmusic.netlify.app/",
+      "youtube": "https://www.youtube.com/@MuddySouthMusic"
+    },
+    "subtitle": "Fast, private WAV to MP3"
+  },
+  "features": [
+    "Drag-and-drop WAV file import",
+    "Multiple file batch conversion",
+    "Selectable MP3 bitrate (128, 160, 192, 256 kbps)",
+    "In-browser conversion with no server upload",
+    "Per-file conversion status and MP3 download links"
+  ],
+  "privacy": {
+    "data_collection": "none",
+    "file_handling": "All audio files remain on-device and are processed locally in-browser.",
+    "third_party_services": [
+      "https://unpkg.com/lamejs@1.2.0/lame.min.js"
+    ],
+    "privacy_policy": "https://muddysouthmusic.netlify.app/"
+  },
+  "review_checklist": {
+    "legal_business_name_verified": true,
+    "support_email_verified": true,
+    "production_url_verified": true,
+    "claims_reviewed": true
+  }
+}
