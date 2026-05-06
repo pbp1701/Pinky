@@ -3,21 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>WAV → MP3 Converter</title>
+  <title>WAV/MP4 → MP3 Converter</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <main class="app-shell">
-    <h1>WAV → MP3</h1>
-    <p class="subtitle">Client-side encoder. No upload, no server.</p>
+    <h1>WAV/MP4 → MP3</h1>
+    <p class="subtitle">Client-side audio converter. Import WAV or MP4 files and export MP3s without uploading anything.</p>
 
     <div id="drop-zone" class="drop-zone">
       <div class="drop-content">
         <div class="icon">🎵</div>
         <strong>Click to import</strong>
-        <span>or drag & drop WAV files here</span>
+        <span>or drag & drop WAV or MP4 files here</span>
       </div>
-      <input id="file-input" type="file" accept="audio/wav,.wav" multiple />
+      <input id="file-input" type="file" accept="audio/wav,audio/mp4,video/mp4,.wav,.mp4,.m4v" multiple />
     </div>
 
     <div class="controls-row">
