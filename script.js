@@ -26,7 +26,7 @@ function createFileCard(file) {
 
   const meta = document.createElement('div');
   meta.className = 'file-meta';
-  meta.textContent = `${formatBytes(file.size)} · ${file.type || 'audio/wav'}`;
+  meta.textContent = `${formatBytes(file.size)} · ${file.type || getFallbackType(file)}`;
 
   const status = document.createElement('div');
   status.className = 'file-meta';
@@ -44,7 +44,7 @@ function createFileCard(file) {
 
 function showFiles(files) {
   fileList.innerHTML = '';
-  selectedFiles = Array.from(files).filter((file) => file.type === 'audio/wav' || file.name.toLowerCase().endsWith('.wav'));
+  selectedFiles = Array.from(files).filter(isSupportedInputFile);
 
   selectedFiles = selectedFiles.map((file) => {
     const fileView = createFileCard(file);
@@ -53,6 +53,29 @@ function showFiles(files) {
   });
 
   updateButtons();
+}
+
+function isSupportedInputFile(file) {
+  const fileName = file.name.toLowerCase();
+  return (
+    file.type === 'audio/wav'
+    || file.type === 'audio/mp4'
+    || file.type === 'video/mp4'
+    || fileName.endsWith('.wav')
+    || fileName.endsWith('.mp4')
+    || fileName.endsWith('.m4v')
+  );
+}
+
+function getFallbackType(file) {
+  const fileName = file.name.toLowerCase();
+  if (fileName.endsWith('.wav')) return 'audio/wav';
+  if (fileName.endsWith('.mp4') || fileName.endsWith('.m4v')) return 'video/mp4';
+  return 'audio file';
+}
+
+function getOutputFileName(fileName) {
+  return fileName.replace(/\.(wav|mp4|m4v)$/i, '.mp3');
 }
 
 async function parseWav(arrayBuffer) {
@@ -109,17 +132,58 @@ async function parseWav(arrayBuffer) {
   };
 }
 
-function encodeMp3(wavData, bitrate) {
-  const mp3Encoder = new lamejs.Mp3Encoder(wavData.numChannels, wavData.sampleRate, bitrate);
-  const left = wavData.left;
-  const right = wavData.right;
+function convertFloat32ToInt16(float32Samples) {
+  const int16Samples = new Int16Array(float32Samples.length);
+
+  for (let i = 0; i < float32Samples.length; i += 1) {
+    const sample = Math.max(-1, Math.min(1, float32Samples[i]));
+    int16Samples[i] = sample < 0 ? sample * 0x8000 : sample * 0x7fff;
+  }
+
+  return int16Samples;
+}
+
+async function decodeMediaFile(arrayBuffer) {
+  const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+  if (!AudioContextClass) {
+    throw new Error('This browser does not support MP4 audio decoding');
+  }
+
+  const audioContext = new AudioContextClass();
+  const audioBuffer = await audioContext.decodeAudioData(arrayBuffer.slice(0));
+  await audioContext.close();
+
+  const numChannels = Math.min(audioBuffer.numberOfChannels, 2);
+  const left = convertFloat32ToInt16(audioBuffer.getChannelData(0));
+  const right = numChannels === 2 ? convertFloat32ToInt16(audioBuffer.getChannelData(1)) : null;
+
+  return {
+    sampleRate: audioBuffer.sampleRate,
+    numChannels,
+    left,
+    right,
+  };
+}
+
+async function decodeInputFile(file, arrayBuffer) {
+  if (file.name.toLowerCase().endsWith('.wav') || file.type === 'audio/wav') {
+    return parseWav(arrayBuffer);
+  }
+
+  return decodeMediaFile(arrayBuffer);
+}
+
+function encodeMp3(audioData, bitrate) {
+  const mp3Encoder = new lamejs.Mp3Encoder(audioData.numChannels, audioData.sampleRate, bitrate);
+  const left = audioData.left;
+  const right = audioData.right;
   const blockSize = 1152;
   const mp3Data = [];
 
   for (let i = 0; i < left.length; i += blockSize) {
     const leftChunk = left.subarray ? left.subarray(i, i + blockSize) : left.slice(i, i + blockSize);
     let mp3buf;
-    if (wavData.numChannels === 2 && right) {
+    if (audioData.numChannels === 2 && right) {
       const rightChunk = right.subarray ? right.subarray(i, i + blockSize) : right.slice(i, i + blockSize);
       mp3buf = mp3Encoder.encodeBuffer(leftChunk, rightChunk);
     } else {
@@ -143,12 +207,12 @@ async function convertFiles() {
 
     try {
       const arrayBuffer = await file.arrayBuffer();
-      const wavData = await parseWav(arrayBuffer);
-      const mp3Blob = encodeMp3(wavData, bitrate);
+      const audioData = await decodeInputFile(file, arrayBuffer);
+      const mp3Blob = encodeMp3(audioData, bitrate);
 
       const url = URL.createObjectURL(mp3Blob);
       link.href = url;
-      link.download = file.name.replace(/\.wav$/i, '.mp3');
+      link.download = getOutputFileName(file.name);
       link.style.display = 'inline-block';
       status.textContent = 'Conversion complete';
     } catch (error) {
